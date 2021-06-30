@@ -7,10 +7,10 @@
 
     
 
-    <title>demo | 汽车云技术博客</title>
+    <title>关于我们 | 汽车云技术博客</title>
     <meta name="author" content="qiov" />
     <meta name="keywords" content="" />
-    <meta name="description" content="Demo我就是个demo" />
+    <meta name="description" content="" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no" />
 
@@ -62,7 +62,7 @@
                 <span class="nav-text">归档</span>
             </a>
         
-            <a class="nav-item" href="/about">
+            <a class="nav-item active" href="/about">
                 <span class="nav-text">关于</span>
             </a>
         
@@ -76,11 +76,24 @@
 
         
         
-        
-        
 
         
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Demo"><span class="toc-number">1.</span> <span class="toc-text">Demo</span></a></li></ol>
+        <div class="author-meta">
+            
+            <div class="author-avatar">
+                <a href="/">
+                    <img src="/images/avatar.png" title="汽车云技术团队">
+                </a>
+            </div>
+            
+            <div class="author-name">汽车云技术团队</div>
+            <div class="author-work">Web &amp; Native Developer</div>
+            <div class="author-location">
+                <i class="icon-location vm"></i>
+                <span class="vm">Beijing, China</span>
+            </div>
+            
+        </div>
         
     </div>
 </aside>
@@ -94,15 +107,15 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            demo
+            关于我们
         </h1>
         
         <div class="article-meta clearfix">
-            <a class="article-date" href="https://qiov.github.io/2021/06/29/demo/index.html">
+            <a class="article-date" href="https://qiov.github.io/about/index.html">
     
     <i class="icon-calendar vm"></i>
     
-    <time class="vm" datetime="2021-06-29T10:03:14.000Z" itemprop="datePublished">2021-06-29</time>
+    <time class="vm" datetime="2021-06-30T05:38:11.000Z" itemprop="datePublished">2021-06-30</time>
 </a>
 
             
@@ -112,37 +125,12 @@
     
     <section class="article-body markdown-body">
         
-        <h1 id="Demo"><a href="#Demo" class="headerlink" title="Demo"></a>Demo</h1><p>我就是个demo</p>
+        <p>汽车云技术团队博客</p>
 
         
     </section>
 </article>
 
-
-
-
-<a id="pageprev" href="/2021/06/30/hello-world/" class="article-prev" title="Hello World"><i class="icon-arrow-left"></i></a>
-
-
-
-<div class="comments">
-    <div id="comments"></div>
-    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
-    <script>
-    new Gitalk({
-        clientID: "814115adcfdf958f7124",
-        clientSecret: "e0e03b20fe5801d1e91a7b4f02024e0c7e548a47",
-        repo: "qiov.github.io",
-        owner: "aslinwang",
-        admin: ["aslinwang"],
-        id: "2b2136f4a4d368d8d27bf21c70ec41d6",
-        distractionFreeMode: true,
-        title: "demo",
-        body: "https://qiov.github.io/2021/06/29/demo/",
-        labels: []
-    }).render('comments');
-    </script>
-</div>
 
 
 
@@ -209,33 +197,6 @@
         });
     });
     </script>
-    
-        
-<script src="/js/scrollspy.min.js"></script>
-
-        <script type="text/javascript">
-        $(document.body).scrollspy({target: '#aside-inner'});
-
-        $(window).on('resize', function() {
-            var hw = $('#header').width();
-            var ww = $('#wrapper').width();
-            var space = ($(this).width() - hw - ww) / 2 / 2;
-
-            var pageprev = $('#pageprev');
-            var pagenext = $('#pagenext');
-            var avg = (pageprev.width() + pagenext.width()) / 2
-
-            if(space > avg) {
-                var len = space - avg / 2;
-                var styles = {position: 'fixed', top: '50%', marginTop: - (pageprev.width() + pagenext.width()) / 4}
-                pageprev.css($.extend({left: hw + len}, styles));
-                pagenext.css($.extend({right: len}, styles));
-            } else {
-                pageprev.removeAttr('style');
-                pagenext.removeAttr('style');
-            }
-        }).trigger('resize');
-        </script>
     
 
 </body>
