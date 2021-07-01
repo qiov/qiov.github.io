@@ -7,10 +7,10 @@
 
     
 
-    <title>汽车云技术博客</title>
+    <title>nodejs接入prometheus | 汽车云技术博客</title>
     <meta name="author" content="qiov" />
     <meta name="keywords" content="" />
-    <meta name="description" content="" />
+    <meta name="description" content="引入上报 sdk安装swagger-stats-ext1npm install swagger-stats-ext@0.95.14-2 --save在 koa 中使用12345678910111213141516171819202122232425262728293031import redis from &amp;quot;redis&amp;quot;;import * as swStats from &amp;quot;swagger-stats-ext&amp;quot;;const promConf = &amp;#123;" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no" />
 
@@ -50,7 +50,7 @@
 
     <nav id="nav-inner" class="nav-inner">
         
-            <a class="nav-item active" href="/">
+            <a class="nav-item" href="/">
                 <span class="nav-text">首页</span>
             </a>
         
@@ -76,24 +76,11 @@
 
         
         
+        
+        
 
         
-        <div class="author-meta">
-            
-            <div class="author-avatar">
-                <a href="/">
-                    <img src="/images/avatar.png" title="汽车云技术团队">
-                </a>
-            </div>
-            
-            <div class="author-name">汽车云技术团队</div>
-            <div class="author-work">Web &amp; Native Developer</div>
-            <div class="author-location">
-                <i class="icon-location vm"></i>
-                <span class="vm">Beijing, China</span>
-            </div>
-            
-        </div>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BC%95%E5%85%A5%E4%B8%8A%E6%8A%A5-sdk"><span class="toc-number">1.</span> <span class="toc-text">引入上报 sdk</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9C%A8-koa-%E4%B8%AD%E4%BD%BF%E7%94%A8"><span class="toc-number">2.</span> <span class="toc-text">在 koa 中使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%8B%E7%82%B9%E4%B8%8A%E6%8A%A5"><span class="toc-number">3.</span> <span class="toc-text">埋点上报</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#reportMCall-service-method-path-http-code-code"><span class="toc-number">3.1.</span> <span class="toc-text">reportMCall(service, method, path, http_code, code)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B"><span class="toc-number">3.2.</span> <span class="toc-text">示例</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B6%E4%BB%96"><span class="toc-number">4.</span> <span class="toc-text">其他</span></a></li></ol>
         
     </div>
 </aside>
@@ -102,17 +89,16 @@
 
         <div id="content" class="content">
             <div id="wrapper" class="wrapper" style="max-width: 800px">
-                
-    <article class="article" itemscope itemprop="blogPost">
+                <article class="article" itemscope itemprop="blogPost">
     
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2021/07/01/nodejs-prometheus/">nodejs接入prometheus</a>
+            nodejs接入prometheus
         </h1>
         
         <div class="article-meta clearfix">
-            <a class="article-date" href="https://qiov.github.io/index.html">
+            <a class="article-date" href="https://qiov.github.io/2021/07/01/nodejs-prometheus/index.html">
     
     <i class="icon-calendar vm"></i>
     
@@ -194,54 +180,30 @@
 </article>
 
 
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2021/06/29/newbee/">新人入职指引</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://qiov.github.io/index.html">
-    
-    <i class="icon-calendar vm"></i>
-    
-    <time class="vm" datetime="2021-06-29T10:03:14.000Z" itemprop="datePublished">2021-06-29</time>
-</a>
 
-            
-<div class="article-tag-list">
-    <i class="icon-tag vm"></i>
-    <a class="article-tag-link" href="/tags/%E5%9B%A2%E9%98%9F/" rel="tag">团队</a>
+<a id="pagenext" href="/2021/06/29/newbee/" class="article-next" title="新人入职指引"><i class="icon-arrow-right"></i></a>
+
+
+
+
+<div class="comments">
+    <div id="comments"></div>
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script>
+    new Gitalk({
+        clientID: "814115adcfdf958f7124",
+        clientSecret: "e0e03b20fe5801d1e91a7b4f02024e0c7e548a47",
+        repo: "blog-comment",
+        owner: "aslinwang",
+        admin: ["aslinwang"],
+        id: "7eebf151de4914e44ffcb921598286de",
+        distractionFreeMode: true,
+        title: "nodejs接入prometheus",
+        body: "https://qiov.github.io/2021/07/01/nodejs-prometheus/",
+        labels: ["nodejs 监控"]
+    }).render('comments');
+    </script>
 </div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h2 id="操作"><a href="#操作" class="headerlink" title="操作"></a>操作</h2><ul>
-<li>注册<a target="_blank" rel="noopener" href="https://git.code.tencent.com/">https://git.code.tencent.com/</a>之后，告知账号</li>
-<li>本地配置git ssh key，以ssh地址的方式clone项目，参考<a target="_blank" rel="noopener" href="https://blog.csdn.net/lqlqlq007/article/details/78983879">https://blog.csdn.net/lqlqlq007/article/details/78983879</a></li>
-<li>注册蓝湖：<a target="_blank" rel="noopener" href="https://lanhuapp.com/">https://lanhuapp.com</a></li>
-<li>下载腾讯会议：<a target="_blank" rel="noopener" href="https://wemeet.qq.com/">https://wemeet.qq.com/</a></li>
-<li>使用vscode，并了解和配置其远程开发功能<a target="_blank" rel="noopener" href="http://www.aslinwang.com/2019/06/vsc-remote-dev/">http://www.aslinwang.com/2019/06/vsc-remote-dev/</a></li>
-</ul>
-<h2 id="团队分享及例会"><a href="#团队分享及例会" class="headerlink" title="团队分享及例会"></a>团队分享及例会</h2><p>如无特殊情况，每周二下午16：30-18：00时间段，为团队分享和例会时间。每周一人次分享，团队成员每周轮流。分享资料上传至<a target="_blank" rel="noopener" href="https://git.code.tencent.com/iov_dev_fe/share">git仓库</a></p>
-<h2 id="资料"><a href="#资料" class="headerlink" title="资料"></a>资料</h2><ul>
-<li>swig模板引擎:<a target="_blank" rel="noopener" href="http://node-swig.github.io/swig-templates/docs/">http://node-swig.github.io/swig-templates/docs/</a></li>
-<li>git commit message规范: <a target="_blank" rel="noopener" href="https://www.conventionalcommits.org/en/v1.0.0/">https://www.conventionalcommits.org/en/v1.0.0/</a></li>
-<li>多人协作git rebase使用：<a target="_blank" rel="noopener" href="http://www.aslinwang.com/2019/06/git-rebase/">http://www.aslinwang.com/2019/06/git-rebase/</a></li>
-</ul>
-
-        
-    </section>
-</article>
-
-
-
 
 
 
@@ -308,6 +270,33 @@
         });
     });
     </script>
+    
+        
+<script src="/js/scrollspy.min.js"></script>
+
+        <script type="text/javascript">
+        $(document.body).scrollspy({target: '#aside-inner'});
+
+        $(window).on('resize', function() {
+            var hw = $('#header').width();
+            var ww = $('#wrapper').width();
+            var space = ($(this).width() - hw - ww) / 2 / 2;
+
+            var pageprev = $('#pageprev');
+            var pagenext = $('#pagenext');
+            var avg = (pageprev.width() + pagenext.width()) / 2
+
+            if(space > avg) {
+                var len = space - avg / 2;
+                var styles = {position: 'fixed', top: '50%', marginTop: - (pageprev.width() + pagenext.width()) / 4}
+                pageprev.css($.extend({left: hw + len}, styles));
+                pagenext.css($.extend({right: len}, styles));
+            } else {
+                pageprev.removeAttr('style');
+                pagenext.removeAttr('style');
+            }
+        }).trigger('resize');
+        </script>
     
 
 </body>
