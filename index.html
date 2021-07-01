@@ -116,7 +116,7 @@
     
     <i class="icon-calendar vm"></i>
     
-    <time class="vm" datetime="2021-07-01T08:17:27.721Z" itemprop="datePublished">2021-07-01</time>
+    <time class="vm" datetime="2021-07-01T08:23:22.637Z" itemprop="datePublished">2021-07-01</time>
 </a>
 
             
@@ -133,62 +133,14 @@
         
         <h2 id="引入上报-sdk"><a href="#引入上报-sdk" class="headerlink" title="引入上报 sdk"></a>引入上报 sdk</h2><p>安装<code>swagger-stats-ext</code></p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install swagger-stats-ext@0.95.14-2 --save</span><br></pre></td></tr></table></figure>
-
-<h2 id="在-koa-中使用"><a href="#在-koa-中使用" class="headerlink" title="在 koa 中使用"></a>在 koa 中使用</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> redis <span class="keyword">from</span> <span class="string">&quot;redis&quot;</span>;</span><br><span class="line"><span class="keyword">import</span> * <span class="keyword">as</span> swStats <span class="keyword">from</span> <span class="string">&quot;swagger-stats-ext&quot;</span>;</span><br><span class="line"><span class="keyword">const</span> promConf = &#123;</span><br><span class="line">  <span class="attr">name</span>: <span class="string">&quot;swagger-stats-appname&quot;</span>,</span><br><span class="line">  <span class="attr">redis</span>: redis.createClient(<span class="number">6379</span>, <span class="string">&quot;127.0.0.1&quot;</span>, &#123;</span><br><span class="line">    <span class="comment">// 使用redis存储用户登录之后的session</span></span><br><span class="line">    <span class="attr">password</span>: <span class="string">&quot;&quot;</span>,</span><br><span class="line">  &#125;),</span><br><span class="line">  <span class="attr">reqBlackList</span>: [<span class="string">&quot;/api/user/&quot;</span>], <span class="comment">// 请求黑名单配置，对于path中含有参数的请求合并上报，比如：/api/user/13456234/get</span></span><br><span class="line">  <span class="attr">pm2</span>: <span class="literal">false</span>, <span class="comment">// 是否使用pm2管理node进程</span></span><br><span class="line">  <span class="attr">version</span>: <span class="string">&quot;0.0.1&quot;</span>,</span><br><span class="line">  <span class="attr">hostname</span>: <span class="string">&quot;hostname&quot;</span>,</span><br><span class="line">  <span class="attr">ip</span>: <span class="string">&quot;127.0.0.1&quot;</span>,</span><br><span class="line">  <span class="attr">timelineBucketDuration</span>: <span class="number">60000</span>,</span><br><span class="line">  <span class="attr">uriPath</span>: <span class="string">&quot;/swagger&quot;</span>,</span><br><span class="line">  <span class="attr">pathProm</span>: <span class="string">&quot;/prometheus&quot;</span>, <span class="comment">// 增加ip:port/&#123;pathProm&#125;路由，默认不增加，返回prometheus的metrics数据</span></span><br><span class="line">  <span class="attr">durationBuckets</span>: [<span class="number">5</span>, <span class="number">10</span>, <span class="number">25</span>, <span class="number">50</span>, <span class="number">100</span>],</span><br><span class="line">  <span class="attr">requestSizeBuckets</span>: [<span class="number">5</span>, <span class="number">10</span>, <span class="number">25</span>, <span class="number">50</span>, <span class="number">100</span>],</span><br><span class="line">  <span class="attr">responseSizeBuckets</span>: [<span class="number">5</span>, <span class="number">10</span>, <span class="number">25</span>, <span class="number">50</span>, <span class="number">100</span>],</span><br><span class="line">  <span class="attr">apdexThreshold</span>: <span class="number">50</span>,</span><br><span class="line">  <span class="attr">onResponseFinish</span>: <span class="function"><span class="keyword">function</span> (<span class="params">req, res, rrr</span>) </span>&#123;&#125;,</span><br><span class="line">  <span class="attr">authentication</span>: <span class="literal">true</span>, <span class="comment">// swagger/ui是否需要鉴权</span></span><br><span class="line">  <span class="attr">onAuthenticate</span>: <span class="function"><span class="keyword">function</span> (<span class="params">req, username, password</span>) </span>&#123;</span><br><span class="line">    <span class="comment">// 验证用户名密码逻辑，如果使用pm2创建了多个进程，需要使用redis来处理</span></span><br><span class="line">    <span class="keyword">return</span> username === <span class="string">&quot;swagger&quot;</span> &amp;&amp; password === <span class="string">&quot;swagger&quot;</span>;</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">const</span> app = <span class="keyword">new</span> Koa();</span><br><span class="line"></span><br><span class="line">swStats.init(promConf);</span><br><span class="line">app.use(swStats.koaMiddleware());</span><br></pre></td></tr></table></figure>
-
-<h2 id="埋点上报"><a href="#埋点上报" class="headerlink" title="埋点上报"></a>埋点上报</h2><blockquote>
-<p>可手动上报基于 http 协议的模块间调用上报</p>
-</blockquote>
-<h3 id="reportMCall-service-method-path-http-code-code"><a href="#reportMCall-service-method-path-http-code-code" class="headerlink" title="reportMCall(service, method, path, http_code, code)"></a>reportMCall(service, method, path, http_code, code)</h3><p>参数说明</p>
-<table>
-<thead>
-<tr>
-<th><strong>参数名</strong></th>
-<th><strong>必选</strong></th>
-<th><strong>默认值</strong></th>
-<th><strong>说明</strong></th>
-</tr>
-</thead>
-<tbody><tr>
-<td>service</td>
-<td>是</td>
-<td></td>
-<td>调用的服务或模块名</td>
-</tr>
-<tr>
-<td>method</td>
-<td>是</td>
-<td></td>
-<td>调用请求的 http 方法(GET/POST)</td>
-</tr>
-<tr>
-<td>path</td>
-<td>是</td>
-<td></td>
-<td>调用请求的路径</td>
-</tr>
-<tr>
-<td>http_code</td>
-<td>是</td>
-<td></td>
-<td>调用请求的 http 码</td>
-</tr>
-<tr>
-<td>code</td>
-<td>否</td>
-<td>0</td>
-<td>模块返回的错误码</td>
-</tr>
-</tbody></table>
-<h3 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> * <span class="keyword">as</span> swStats <span class="keyword">from</span> <span class="string">&quot;swagger-stats-ext&quot;</span>;</span><br><span class="line">swStats.reportMCall(<span class="string">&quot;user&quot;</span>, <span class="string">&quot;GET&quot;</span>, <span class="string">&quot;/info/get&quot;</span>, <span class="number">200</span>, <span class="number">0</span>);</span><br></pre></td></tr></table></figure>
-
-<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><ul>
-<li>访问 <a href="http://ip:port/prometheus">http://ip:port/prometheus</a> 查看 metrics 数据</li>
-<li>访问 <a href="http://ip:port/swagger/ui">http://ip:port/swagger/ui</a> 查看 swagger 可视化监控数据</li>
-<li><code>promConf</code>配置数据，参考<a target="_blank" rel="noopener" href="https://swaggerstats.io/guide/conf.html">https://swaggerstats.io/guide/conf.html</a></li>
-<li>使用非 koa 框架或有关<code>swagger-stats</code>的更多信息，参考<a target="_blank" rel="noopener" href="https://swaggerstats.io/guide/">https://swaggerstats.io/guide/</a></li>
-</ul>
-
+        
+        <p class="article-more-link">
+            <a href="/2021/07/01/nodejs-prometheus/#more">
+                <span class="vm">阅读更多</span>
+                <i class="icon-arrow-double-right vm"></i>    
+            </a>
+        </p>
+        
         
     </section>
 </article>
@@ -207,7 +159,7 @@
     
     <i class="icon-calendar vm"></i>
     
-    <time class="vm" datetime="2021-07-01T08:17:27.717Z" itemprop="datePublished">2021-07-01</time>
+    <time class="vm" datetime="2021-07-01T08:23:22.633Z" itemprop="datePublished">2021-07-01</time>
 </a>
 
             
@@ -223,64 +175,14 @@
     <section class="article-body markdown-body">
         
         <p>记录开发过程中的细节，踩过的坑，学习的姿势。</p>
-<h2 id="禁用eslint校验规则"><a href="#禁用eslint校验规则" class="headerlink" title="禁用eslint校验规则"></a>禁用eslint校验规则</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// eslint-disable-next-line @typescript-eslint/camelcase</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="husky-hook失效自检"><a href="#husky-hook失效自检" class="headerlink" title="husky hook失效自检"></a>husky hook失效自检</h2><p>如果项目中有用到husky的，先检查下项目目录下<code>.git/hooks</code>目录中有无如下所示的git hook脚本</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">$ ll .git/hooks/</span><br><span class="line">-rwxr-xr-x 1 root root 1486 Dec 24 11:35 applypatch-msg</span><br><span class="line">-rwxr-xr-x 1 root root  478 Dec  3 01:49 applypatch-msg.sample</span><br><span class="line">-rwxr-xr-x 1 root root 1486 Dec 24 11:35 commit-msg</span><br><span class="line">-rwxr-xr-x 1 root root  896 Dec  3 01:49 commit-msg.sample</span><br><span class="line">-rwxr-xr-x 1 root root 1486 Dec 24 11:35 post-applypatch</span><br><span class="line">-rwxr-xr-x 1 root root 1486 Dec 24 11:35 post-checkout</span><br><span class="line">-rwxr-xr-x 1 root root 1486 Dec 24 11:35 post-commit</span><br><span class="line">-rwxr-xr-x 1 root root 1486 Dec 24 11:35 post-merge</span><br><span class="line">-rwxr-xr-x 1 root root 1486 Dec 24 11:35 post-receive</span><br><span class="line">-rwxr-xr-x 1 root root 1486 Dec 24 11:35 post-rewrite</span><br><span class="line">-rwxr-xr-x 1 root root 1486 Dec 24 11:35 post-update</span><br><span class="line">-rwxr-xr-x 1 root root  189 Dec  3 01:49 post-update.sample</span><br><span class="line">-rwxr-xr-x 1 root root 1486 Dec 24 11:35 pre-applypatch</span><br><span class="line">-rwxr-xr-x 1 root root  424 Dec  3 01:49 pre-applypatch.sample</span><br><span class="line">-rwxr-xr-x 1 root root 1486 Dec 24 11:35 pre-auto-gc</span><br><span class="line">-rwxr-xr-x 1 root root 1486 Dec 24 11:35 pre-commit</span><br><span class="line">-rwxr-xr-x 1 root root 1642 Dec  3 01:49 pre-commit.sample</span><br><span class="line">-rwxr-xr-x 1 root root 1486 Dec 24 11:35 pre-merge-commit</span><br><span class="line">-rwxr-xr-x 1 root root 1486 Dec 24 11:35 prepare-commit-msg</span><br><span class="line">-rwxr-xr-x 1 root root 1492 Dec  3 01:49 prepare-commit-msg.sample</span><br><span class="line">-rwxr-xr-x 1 root root 1486 Dec 24 11:35 pre-push</span><br><span class="line">-rwxr-xr-x 1 root root 1348 Dec  3 01:49 pre-push.sample</span><br><span class="line">-rwxr-xr-x 1 root root 1486 Dec 24 11:35 pre-rebase</span><br><span class="line">-rwxr-xr-x 1 root root 4898 Dec  3 01:49 pre-rebase.sample</span><br><span class="line">-rwxr-xr-x 1 root root 1486 Dec 24 11:35 pre-receive</span><br><span class="line">-rwxr-xr-x 1 root root  544 Dec  3 01:49 pre-receive.sample</span><br><span class="line">-rwxr-xr-x 1 root root 1486 Dec 24 11:35 push-to-checkout</span><br><span class="line">-rwxr-xr-x 1 root root 1486 Dec 24 11:35 sendemail-validate</span><br><span class="line">-rwxr-xr-x 1 root root 1486 Dec 24 11:35 update</span><br><span class="line">-rwxr-xr-x 1 root root 3610 Dec  3 01:49 update.sample</span><br></pre></td></tr></table></figure>
-<p>若无，卸载husky包后重新安装</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ npm uninstall husky --save-dev</span><br><span class="line">$ npm install husky --save-dev</span><br></pre></td></tr></table></figure>
-
-<h2 id="docker镜像启动失败"><a href="#docker镜像启动失败" class="headerlink" title="docker镜像启动失败"></a>docker镜像启动失败</h2><p><code>failed to register layer: Error processing tar file(exit status 1): write file : no space left on device</code></p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker system df</span><br><span class="line">docker system prune -a</span><br></pre></td></tr></table></figure>
-
-<h2 id="vs-code远程开发转发端口到本地"><a href="#vs-code远程开发转发端口到本地" class="headerlink" title="vs code远程开发转发端口到本地"></a>vs code远程开发转发端口到本地</h2><p>option + click could trigger port forwarding in vs code.<br>远程开发过程中，通过点击终端中的链接，vscode会自动创建ssh通道做端口转发。即：本地可以通过<a href="http://127.0.0.1:port">http://127.0.0.1:port</a> 直接访问服务端port上的服务，无视本机网络环境，非常实用的功能。</p>
-<blockquote>
-<p><a target="_blank" rel="noopener" href="https://github.com/microsoft/vscode/issues/76175">https://github.com/microsoft/vscode/issues/76175</a></p>
-</blockquote>
-<h2 id="vue打包之后的脚本在IE不兼容-含有ES6语法"><a href="#vue打包之后的脚本在IE不兼容-含有ES6语法" class="headerlink" title="vue打包之后的脚本在IE不兼容(含有ES6语法)"></a>vue打包之后的脚本在IE不兼容(含有ES6语法)</h2><p>1、IE不兼容报错表现</p>
-<img src="/2021/07/01/magiclist/bugs-1.png" class="">
-
-<p>2、经过排查，发现在引用inc sdk的时候，<code>utils.config</code>部分引用了第三方库<code>cos-nodejs-sdk-v5</code>，这是一个commonjs规范的库，且inc utils模块在使用rollup打包的时候，将<code>cos-nodejs-sdk-v5</code>设置为第三方依赖，并不会在打包的时候，将依赖源码打包进inc sdk中</p>
-<p>3、vue项目在采用webpack打包的时候，检测到对<code>@incubator/utils</code>的依赖，同时会将<code>utils.config</code>的依赖关系打包到最后的js文件中。<strong>注意，对于采用ES6语法直接发布的依赖包，默认的vue.config配置并不会做ES5转换工作</strong>,这也是导致1中IE不兼容ES6语法而报错的原因。比如使用<code>const</code>、箭头函数等语法</p>
-<p>4、在<code>vue.config.js</code>中，新增<code>transpileDependencies</code>选项，可以显示指定构建过程中对依赖项进行转换成ES5语法后再构建</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">transpileDependencies: [&#x27;configstore&#x27;, &#x27;crypto-random-string&#x27;, &#x27;dot-prop&#x27;, &#x27;unique-string&#x27;, &#x27;xdg-basedir&#x27;, &#x27;write-file-atomic&#x27;]</span><br></pre></td></tr></table></figure>
-
-<p>5、经过4之后，发现在IE环境下，某个依赖依赖会报错”strict模式下不允许分配到只读属性“,错误指向的是<code>module.export=function()&#123;...&#125;</code>。这个错误原因未知</p>
-<p>6、经过对inc utils依赖包的分析，使用<code>cos-nodejs-sdk-v5</code>依赖的<code>utils.config</code>主要用于node端获取远程配置使用，很少在浏览器端使用。所以将此模块拆分出来，放在专门用于node端的utils package中<code>@incubator/nutils</code>中，并且在以后对inc sdk的规划中，都需要做浏览器端和node端功能模块的分离，以免出现两端的兼容性问题</p>
-<h2 id="docker服务访问宿主机mysql"><a href="#docker服务访问宿主机mysql" class="headerlink" title="docker服务访问宿主机mysql"></a>docker服务访问宿主机mysql</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; INSERT INTO mysql.user (Host, User, Password) VALUES (&#x27;%&#x27;, &#x27;root&#x27;, password(&#x27;YOURPASSWORD&#x27;));</span><br><span class="line">mysql&gt; grant all privileges on *.* to &#x27;root&#x27;@&#x27;%&#x27;;</span><br><span class="line">mysql&gt; flush privileges;</span><br></pre></td></tr></table></figure>
-
-<h2 id="mongodb分片集群非片键唯一索引问题"><a href="#mongodb分片集群非片键唯一索引问题" class="headerlink" title="mongodb分片集群非片键唯一索引问题"></a>mongodb分片集群非片键唯一索引问题</h2><p>分片集群由于其自身特点，对于非片键字段无法按照常规的方式创建unique索引。因为各分片相对独立，且可以维护自身分片的索引信息。针对整个集群来说，分片实例无法检测其他分片上的数据存储情况，导致unique检测失效。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mongos&gt; db.role.stats().shards <span class="comment"># 查看分片情况</span></span><br><span class="line">mongos&gt; db.role.ensureIndex(&#123;roleName:1&#125;, &#123;unique:<span class="literal">true</span>&#125;) <span class="comment"># 创建索引</span></span><br></pre></td></tr></table></figure>
-<p>解决方案：（proxy collection）</p>
-<ul>
-<li><a target="_blank" rel="noopener" href="https://docs.mongodb.com/manual/tutorial/unique-constraints-on-arbitrary-fields/#shard-key-arbitrary-uniqueness">Unique Constraints on Arbitrary Fields</a></li>
-<li><a target="_blank" rel="noopener" href="https://github.com/maurermax/mongoose-unique-shard">mongoose-unique-shard</a></li>
-</ul>
-<h2 id="nginx-serve-static-dockerfile-容器服务"><a href="#nginx-serve-static-dockerfile-容器服务" class="headerlink" title="nginx serve static dockerfile 容器服务"></a>nginx serve static dockerfile 容器服务</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">FROM nginx:stable</span><br><span class="line"></span><br><span class="line">COPY ./dist/www /var/www</span><br><span class="line">COPY ./nginx.conf /etc/nginx/conf.d/default.conf</span><br><span class="line"></span><br><span class="line">CMD [<span class="string">&quot;nginx&quot;</span>, <span class="string">&quot;-g&quot;</span>, <span class="string">&quot;daemon off;&quot;</span>]</span><br></pre></td></tr></table></figure>
-
-<h2 id="npm-install过程慢"><a href="#npm-install过程慢" class="headerlink" title="npm install过程慢"></a>npm install过程慢</h2><p>安装过程中，有些包需要下载预编译好的二进制文件，这些npm包的部分功能由原生插件提供。预编译二进制包可能被托管在github.com上，国内网络访问可能会超时，导致npm install过程很慢，甚至失败。解决方案有：</p>
-<ul>
-<li>从源码编译：npm install –build-from-source。虽然不会从远程下载已经预编译好的包，但是从源码编译的过程也很慢，如果本地没有编译环境甚至可能会出错</li>
-<li>指定预编译包镜像源：每个包的镜像配置方式都不一样，部分包配置如下<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">npm config <span class="built_in">set</span> electron_mirror https://npm.taobao.org/mirrors/electron/</span><br><span class="line">npm config <span class="built_in">set</span> sass_binary_site https://npm.taobao.org/mirrors/node-sass/</span><br><span class="line">npm config <span class="built_in">set</span> phantomjs_cdnurl https://npm.taobao.org/mirrors/phantomjs/</span><br><span class="line">npm config <span class="built_in">set</span> chromedriver_cdnurl https://npm.taobao.org/mirrors/chromedriver/</span><br><span class="line">npm config <span class="built_in">set</span> operadriver_cdnurl https://npm.taobao.org/mirrors/operadriver/</span><br><span class="line">npm config <span class="built_in">set</span> python_mirror https://npm.taobao.org/mirrors/python/</span><br><span class="line">npm config <span class="built_in">set</span> electron_builder_binaries_mirror https://npm.taobao.org/mirrors/electron-builder-binaries/</span><br><span class="line">npm config <span class="built_in">set</span> node_sqlite3_binary_host_mirror https://npm.taobao.org/mirrors</span><br></pre></td></tr></table></figure></li>
-<li>使用多阶段构建，让npm install单独作为一个构建阶段并生成一个镜像作为docker cache，如果package.json没有改动，将会直接命中缓存</li>
-<li>想过在docker中挂载宿主机上的npm cache目录，使在docker中执行npm install的时候能使用宿主机上的npm缓存，但是这种方法无效。因为docker build过程中无法进行<code>volumn</code>操作</li>
-</ul>
-<h2 id="rollup-babel打包"><a href="#rollup-babel打包" class="headerlink" title="rollup + babel打包"></a>rollup + babel打包</h2><ul>
-<li><code>Error: Cannot find module &#39;rollupPluginBabelHelpers.js&#39;</code><br>更新rollup版本，fbi模板中的rollup的版本是<code>0.62.0</code></li>
-<li>如果使用babel 7，其中的babel配置需要注意，网上很多babel配置教程都是7以前的，并不适用于7。比如7去除了stage-x的preset配置，需要开发者自己按需引入plugin</li>
-</ul>
-<p>参考:</p>
-<ul>
-<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/chris-oil/p/5717544.html">如何区分Babel中的stage-0,stage-1,stage-2以及stage-3</a></li>
-<li><a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000016541105">升级到Babel 7的经验</a></li>
-</ul>
-<h2 id="正则表达式零宽断言的兼容性问题"><a href="#正则表达式零宽断言的兼容性问题" class="headerlink" title="正则表达式零宽断言的兼容性问题"></a>正则表达式零宽断言的兼容性问题</h2><p>正则表达式中的零宽断言中的负向零宽断言属于ES7的提案，并不是所有浏览器都支持，比如iOS端微信浏览器和小程序中就不支持。控制台将会报错“Invalid regular expression: invalid group specifier name”。解决方法是换一种正则表达式的写法，不使用零宽断言。</p>
-<p>参考：</p>
-<ul>
-<li><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/community/develop/doc/00044a0e314748874ee6a211851400">小程序js正则表达式不支持零宽断言么？</a></li>
-<li><a target="_blank" rel="noopener" href="https://juejin.im/post/6844903728810557454">正则匹配之零宽断言</a></li>
-</ul>
-
+        
+        <p class="article-more-link">
+            <a href="/2021/07/01/magiclist/#more">
+                <span class="vm">阅读更多</span>
+                <i class="icon-arrow-double-right vm"></i>    
+            </a>
+        </p>
+        
         
     </section>
 </article>
