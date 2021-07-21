@@ -108,115 +108,6 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2021/07/21/git-commit-with-tapd-keywords/">TAPD+工蜂，让代码和需求缺陷单关联起来</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://qiov.github.io/index.html">
-    
-    <i class="icon-calendar vm"></i>
-    
-    <time class="vm" datetime="2021-07-21T10:50:32.452Z" itemprop="datePublished">2021-07-21</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag vm"></i>
-    <a class="article-tag-link" href="/tags/%E5%9B%A2%E9%98%9F/" rel="tag">团队</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>在项目迭代开发过程中，需求和缺陷涉及到的代码改动会比较多，特别在微服务架构模式下，涉及到的服务也会比较多。那么在版本发布过程中，可能会造成服务漏发或错发的情况。如果能够将每次的代码改动和tapd上的需求或缺陷单关联起来，在发版时，可以让开发同学作为参考，梳理出本次迭代需要发布的代码和服务。</p>
-<p>tapd缺陷单与代码关联如图所示：</p>
-<p><img src="http://blog-1253233020.cosgz.myqcloud.com/20210721153714.png"></p>
-<p>按照提交人和时间统计版本的代码提交情况：</p>
-<p><img src="http://blog-1253233020.cosgz.myqcloud.com/20210721153629.png"></p>
-<h2 id="操作指引"><a href="#操作指引" class="headerlink" title="操作指引"></a>操作指引</h2><h3 id="管理员关注"><a href="#管理员关注" class="headerlink" title="管理员关注"></a>管理员关注</h3><p>以下操作完成之后，开发即可按特定commit msg规范提交代码，tapd上的需求和缺陷自动关联提交内容。如果不符合提交规范，则push失败</p>
-<h4 id="在tapd设置中添加“腾讯工蜂”应用"><a href="#在tapd设置中添加“腾讯工蜂”应用" class="headerlink" title="在tapd设置中添加“腾讯工蜂”应用"></a>在tapd设置中添加“腾讯工蜂”应用</h4><p><img src="http://blog-1253233020.cosgz.myqcloud.com/20210721153939.png"></p>
-<h4 id="在tapd的“腾讯工蜂”应用配置中参照指引，配置对应git仓库的webhooks"><a href="#在tapd的“腾讯工蜂”应用配置中参照指引，配置对应git仓库的webhooks" class="headerlink" title="在tapd的“腾讯工蜂”应用配置中参照指引，配置对应git仓库的webhooks"></a>在tapd的“腾讯工蜂”应用配置中参照指引，配置对应git仓库的webhooks</h4><p><img src="http://blog-1253233020.cosgz.myqcloud.com/20210721155355.png"></p>
-<p><img src="http://blog-1253233020.cosgz.myqcloud.com/20210721154649.png"></p>
-<h4 id="在git仓库配置”pre-receive”，用于校验git-commit-msg（master及以上权限）"><a href="#在git仓库配置”pre-receive”，用于校验git-commit-msg（master及以上权限）" class="headerlink" title="在git仓库配置”pre-receive”，用于校验git commit msg（master及以上权限）"></a>在git仓库配置”pre-receive”，用于校验git commit msg（master及以上权限）</h4><p><img src="http://blog-1253233020.cosgz.myqcloud.com/20210721155554.png"><br>使用内置的“require-issue.sh”脚本即可：<br><img src="http://blog-1253233020.cosgz.myqcloud.com/20210721155704.png"></p>
-<h3 id="开发关注"><a href="#开发关注" class="headerlink" title="开发关注"></a>开发关注</h3><h4 id="提交代码前获取提交关键词"><a href="#提交代码前获取提交关键词" class="headerlink" title="提交代码前获取提交关键词"></a>提交代码前获取提交关键词</h4><p><img src="http://blog-1253233020.cosgz.myqcloud.com/20210721160542.png"></p>
-<p><strong>注意</strong>：建议每次提交仅解决一个需求或者缺陷，不要在一次git提交中处理多个问题</p>
-<p>commit msg规范说明：</p>
-<ul>
-<li>关联需求：<code>--story=[story id1],[story id2] --user=[usernick] 描述信息</code></li>
-<li>关联缺陷：<code>--bug=[bug id1],[bug id2] --user=[usernick] 描述信息</code></li>
-<li>无关联单据：<code>--other=描述信息</code></li>
-</ul>
-<p>如果commit msg不符合规范，push到远程仓库会报如下所示错误：</p>
-<p><img src="http://blog-1253233020.cosgz.myqcloud.com/20210721161452.png"></p>
-<h4 id="修改git提交历史的commit-msg"><a href="#修改git提交历史的commit-msg" class="headerlink" title="修改git提交历史的commit msg"></a>修改git提交历史的commit msg</h4><p>如果在push之前，已经提交了一些不符合规范的commit msg，可以通过以下方式来解决。</p>
-<p>1、如果历史只有一条不符合规范的提交待push，可以执行<code>git commit --amend</code>进行修改</p>
-<p><img src="http://blog-1253233020.cosgz.myqcloud.com/20210721174645.png"></p>
-<p>2、如果历史有超过一条不符合规范的提交待push，可以按以下流程修改提交msg</p>
-<p><img src="http://blog-1253233020.cosgz.myqcloud.com/20210721183718.png"></p>
-<p>2.1、执行<code>git rebase -i HEAD~3</code>命令, 修改近三次的信息。这里的3视具体情况而定</p>
-<p><img src="http://blog-1253233020.cosgz.myqcloud.com/20210721183804.png"></p>
-<p>2.2、找到不符合规范的日志, 将第一个pick 修改为edit, 然后 :wq 退出</p>
-<p><img src="http://blog-1253233020.cosgz.myqcloud.com/20210721184358.png"></p>
-<p>2.3、执行<code>git commit --amend</code>, 修改第一条需要修改的msg。修改完成后, 执行<code>git rebase --continue</code>修改下一条不符合规范的日志</p>
-<p><img src="http://blog-1253233020.cosgz.myqcloud.com/20210721184520.png"></p>
-<p>2.4、2.3执行完成之后，再查看日志记录，所有不符合规范的日志都被改正了，然后进行push操作</p>
-<p><img src="http://blog-1253233020.cosgz.myqcloud.com/20210721184609.png"></p>
-
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2021/07/21/magiclist/">填坑回忆录</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://qiov.github.io/index.html">
-    
-    <i class="icon-calendar vm"></i>
-    
-    <time class="vm" datetime="2021-07-21T10:50:32.452Z" itemprop="datePublished">2021-07-21</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag vm"></i>
-    <a class="article-tag-link" href="/tags/bug/" rel="tag">bug</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <p>记录开发过程中的细节，踩过的坑，学习的姿势。</p>
-        
-        <p class="article-more-link">
-            <a href="/2021/07/21/magiclist/#more">
-                <span class="vm">阅读更多</span>
-                <i class="icon-arrow-double-right vm"></i>    
-            </a>
-        </p>
-        
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
             <a href="/2021/07/21/nodejs-prometheus/">nodejs接入prometheus</a>
         </h1>
         
@@ -225,7 +116,7 @@
     
     <i class="icon-calendar vm"></i>
     
-    <time class="vm" datetime="2021-07-21T10:50:32.452Z" itemprop="datePublished">2021-07-21</time>
+    <time class="vm" datetime="2021-07-21T11:22:29.132Z" itemprop="datePublished">2021-07-21</time>
 </a>
 
             
@@ -245,6 +136,94 @@
         
         <p class="article-more-link">
             <a href="/2021/07/21/nodejs-prometheus/#more">
+                <span class="vm">阅读更多</span>
+                <i class="icon-arrow-double-right vm"></i>    
+            </a>
+        </p>
+        
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2021/07/21/git-commit-with-tapd-keywords/">TAPD+工蜂，让代码和需求缺陷单关联起来</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://qiov.github.io/index.html">
+    
+    <i class="icon-calendar vm"></i>
+    
+    <time class="vm" datetime="2021-07-21T11:22:29.128Z" itemprop="datePublished">2021-07-21</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag vm"></i>
+    <a class="article-tag-link" href="/tags/%E5%9B%A2%E9%98%9F/" rel="tag">团队</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>在项目迭代开发过程中，需求和缺陷涉及到的代码改动会比较多，特别在微服务架构模式下，涉及到的服务也会比较多。那么在版本发布过程中，可能会造成服务漏发或错发的情况。如果能够将每次的代码改动和tapd上的需求或缺陷单关联起来，在发版时，可以让开发同学作为参考，梳理出本次迭代需要发布的代码和服务。</p>
+<p>tapd缺陷单与代码关联如图所示：</p>
+<p><img src="http://blog-1253233020.cosgz.myqcloud.com/20210721153714.png"></p>
+<p>按照提交人和时间统计版本的代码提交情况：</p>
+<p><img src="http://blog-1253233020.cosgz.myqcloud.com/20210721153629.png"></p>
+        
+        <p class="article-more-link">
+            <a href="/2021/07/21/git-commit-with-tapd-keywords/#more">
+                <span class="vm">阅读更多</span>
+                <i class="icon-arrow-double-right vm"></i>    
+            </a>
+        </p>
+        
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2021/07/21/magiclist/">填坑回忆录</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://qiov.github.io/index.html">
+    
+    <i class="icon-calendar vm"></i>
+    
+    <time class="vm" datetime="2021-07-21T11:22:29.128Z" itemprop="datePublished">2021-07-21</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag vm"></i>
+    <a class="article-tag-link" href="/tags/bug/" rel="tag">bug</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <p>记录开发过程中的细节，踩过的坑，学习的姿势。</p>
+        
+        <p class="article-more-link">
+            <a href="/2021/07/21/magiclist/#more">
                 <span class="vm">阅读更多</span>
                 <i class="icon-arrow-double-right vm"></i>    
             </a>
