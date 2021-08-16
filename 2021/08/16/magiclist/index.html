@@ -101,11 +101,11 @@
         </h1>
         
         <div class="article-meta clearfix">
-            <a class="article-date" href="https://qiov.github.io/2021/07/26/magiclist/index.html">
+            <a class="article-date" href="https://qiov.github.io/2021/08/16/magiclist/index.html">
     
     <i class="icon-calendar vm"></i>
     
-    <time class="vm" datetime="2021-07-26T07:58:00.061Z" itemprop="datePublished">2021-07-26</time>
+    <time class="vm" datetime="2021-08-16T02:06:37.254Z" itemprop="datePublished">2021-08-16</time>
 </a>
 
             
@@ -138,7 +138,7 @@
 <p><a target="_blank" rel="noopener" href="https://github.com/microsoft/vscode/issues/76175">https://github.com/microsoft/vscode/issues/76175</a></p>
 </blockquote>
 <h2 id="vue打包之后的脚本在IE不兼容-含有ES6语法"><a href="#vue打包之后的脚本在IE不兼容-含有ES6语法" class="headerlink" title="vue打包之后的脚本在IE不兼容(含有ES6语法)"></a>vue打包之后的脚本在IE不兼容(含有ES6语法)</h2><p>1、IE不兼容报错表现</p>
-<img src="/2021/07/26/magiclist/bugs-1.png" class="">
+<img src="/2021/08/16/magiclist/bugs-1.png" class="">
 
 <p>2、经过排查，发现在引用inc sdk的时候，<code>utils.config</code>部分引用了第三方库<code>cos-nodejs-sdk-v5</code>，这是一个commonjs规范的库，且inc utils模块在使用rollup打包的时候，将<code>cos-nodejs-sdk-v5</code>设置为第三方依赖，并不会在打包的时候，将依赖源码打包进inc sdk中</p>
 <p>3、vue项目在采用webpack打包的时候，检测到对<code>@incubator/utils</code>的依赖，同时会将<code>utils.config</code>的依赖关系打包到最后的js文件中。<strong>注意，对于采用ES6语法直接发布的依赖包，默认的vue.config配置并不会做ES5转换工作</strong>,这也是导致1中IE不兼容ES6语法而报错的原因。比如使用<code>const</code>、箭头函数等语法</p>
@@ -200,10 +200,10 @@
 
 
 
-<a id="pagenext" href="/2021/07/26/nodejs-prometheus/" class="article-next" title="nodejs接入prometheus"><i class="icon-arrow-right"></i></a>
+<a id="pagenext" href="/2021/08/16/nodejs-prometheus/" class="article-next" title="nodejs接入prometheus"><i class="icon-arrow-right"></i></a>
 
 
-<a id="pageprev" href="/2021/07/26/git-commit-with-tapd-keywords/" class="article-prev" title="TAPD+工蜂，让代码和需求缺陷单关联起来"><i class="icon-arrow-left"></i></a>
+<a id="pageprev" href="/2021/08/16/git-commit-with-tapd-keywords/" class="article-prev" title="TAPD+工蜂，让代码和需求缺陷单关联起来"><i class="icon-arrow-left"></i></a>
 
 
 
@@ -217,10 +217,10 @@
         repo: "blog-comment",
         owner: "aslinwang",
         admin: ["aslinwang"],
-        id: "c8c962834d02ac6d8a685e97a14e5cc9",
+        id: "07ec0294d2283232812a486dc3147cdd",
         distractionFreeMode: true,
         title: "填坑回忆录",
-        body: "https://qiov.github.io/2021/07/26/magiclist/",
+        body: "https://qiov.github.io/2021/08/16/magiclist/",
         labels: ["bug"]
     }).render('comments');
     </script>

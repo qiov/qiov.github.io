@@ -111,7 +111,7 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2021/07/26/git-commit-with-tapd-keywords/">TAPD+工蜂，让代码和需求缺陷单关联起来</a>
+            <a href="/2021/08/16/android_gradle_illustration/">Android Gradle远程仓库、依赖库使用注意</a>
         </h1>
         
         <div class="article-meta clearfix">
@@ -119,7 +119,52 @@
     
     <i class="icon-calendar vm"></i>
     
-    <time class="vm" datetime="2021-07-26T07:58:00.061Z" itemprop="datePublished">2021-07-26</time>
+    <time class="vm" datetime="2021-08-16T02:06:37.254Z" itemprop="datePublished">2021-08-16</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag vm"></i>
+    <a class="article-tag-link" href="/tags/Android-Gradle%E7%BC%96%E8%AF%91/" rel="tag">Android Gradle编译</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h3><p>项目在编译过程中经常会有编译失败或者编译速度很慢的情况，针对这些问题做一个小的总结。</p>
+<h3 id="通用的远程代理配置"><a href="#通用的远程代理配置" class="headerlink" title="通用的远程代理配置"></a>通用的远程代理配置</h3><p>使用阿里云代理</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">maven &#123;url &#x27;https://maven.aliyun.com/repository/google/&#x27;&#125;</span><br><span class="line">maven &#123;url &#x27;https://maven.aliyun.com/repository/public/&#x27;&#125;</span><br><span class="line">maven &#123;url &#x27;https://maven.aliyun.com/repository/gradle-plugin/&#x27;&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="Gradle远程仓库下载原则"><a href="#Gradle远程仓库下载原则" class="headerlink" title="Gradle远程仓库下载原则"></a>Gradle远程仓库下载原则</h3><p>1.项目工程目录下的bulid.gradle文件主要是配置模块和所有工程使用的三方库来源，gradle在构建时候，如果是新项目首次构建、本地没有下载依赖库的情况下，会从配置的仓库中下载；</p>
+<p>2.多个仓库同时存在改库的情况下，gradle依照配置的仓库从上往下查找，在某一个库成功找到并下载后不再继续查找；</p>
+<p>3.模块远程依赖库如果配置未声明明确的版本号，以动态版本号“xxx:+”或者“RELEASE、LATEST”等形式声明，Gradle在每次构建的时候，都会像配置的远程仓库请求下载maven-matedata.xml，获取远程最新的版本；</p>
+<p>4.Gradle配置的远程仓库，当3中的构建请求远程仓库更新，而远程仓库无法访问，这时候构建会很慢（部分仓库转移地址重新定向，访问速度慢）甚至构建失败（仓库完全无法访问）；</p>
+<h3 id="使用建议"><a href="#使用建议" class="headerlink" title="使用建议"></a>使用建议</h3><p>1.为保持稳定，建议模块的build.gradle文件配置的依赖库确定固定的版本号，也能加快build的速度。</p>
+<p>2.务必明确项目使用三方依赖库的远程来源，避免因没有配置远程仓库造成库下载失败。</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2021/08/16/git-commit-with-tapd-keywords/">TAPD+工蜂，让代码和需求缺陷单关联起来</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://qiov.github.io/index.html">
+    
+    <i class="icon-calendar vm"></i>
+    
+    <time class="vm" datetime="2021-08-16T02:06:37.254Z" itemprop="datePublished">2021-08-16</time>
 </a>
 
             
@@ -141,7 +186,7 @@
 <p><img src="http://blog-1253233020.cosgz.myqcloud.com/20210721153629.png"></p>
         
         <p class="article-more-link">
-            <a href="/2021/07/26/git-commit-with-tapd-keywords/#more">
+            <a href="/2021/08/16/git-commit-with-tapd-keywords/#more">
                 <span class="vm">阅读更多</span>
                 <i class="icon-arrow-double-right vm"></i>    
             </a>
@@ -157,7 +202,7 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2021/07/26/magiclist/">填坑回忆录</a>
+            <a href="/2021/08/16/magiclist/">填坑回忆录</a>
         </h1>
         
         <div class="article-meta clearfix">
@@ -165,7 +210,7 @@
     
     <i class="icon-calendar vm"></i>
     
-    <time class="vm" datetime="2021-07-26T07:58:00.061Z" itemprop="datePublished">2021-07-26</time>
+    <time class="vm" datetime="2021-08-16T02:06:37.254Z" itemprop="datePublished">2021-08-16</time>
 </a>
 
             
@@ -183,7 +228,7 @@
         <p>记录开发过程中的细节，踩过的坑，学习的姿势。</p>
         
         <p class="article-more-link">
-            <a href="/2021/07/26/magiclist/#more">
+            <a href="/2021/08/16/magiclist/#more">
                 <span class="vm">阅读更多</span>
                 <i class="icon-arrow-double-right vm"></i>    
             </a>
@@ -199,7 +244,7 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2021/07/26/nodejs-prometheus/">nodejs接入prometheus</a>
+            <a href="/2021/08/16/nodejs-prometheus/">nodejs接入prometheus</a>
         </h1>
         
         <div class="article-meta clearfix">
@@ -207,7 +252,7 @@
     
     <i class="icon-calendar vm"></i>
     
-    <time class="vm" datetime="2021-07-26T07:58:00.061Z" itemprop="datePublished">2021-07-26</time>
+    <time class="vm" datetime="2021-08-16T02:06:37.254Z" itemprop="datePublished">2021-08-16</time>
 </a>
 
             
@@ -226,12 +271,67 @@
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install swagger-stats-ext@0.95.14-2 --save</span><br></pre></td></tr></table></figure>
         
         <p class="article-more-link">
-            <a href="/2021/07/26/nodejs-prometheus/#more">
+            <a href="/2021/08/16/nodejs-prometheus/#more">
                 <span class="vm">阅读更多</span>
                 <i class="icon-arrow-double-right vm"></i>    
             </a>
         </p>
         
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2021/08/16/react-native-develop-questions/">使用react-native开发app踩坑记录</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://qiov.github.io/index.html">
+    
+    <i class="icon-calendar vm"></i>
+    
+    <time class="vm" datetime="2021-08-16T02:06:37.254Z" itemprop="datePublished">2021-08-16</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag vm"></i>
+    <a class="article-tag-link" href="/tags/react-native/" rel="tag">react-native</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h3 id="iOS和android平台上的差异"><a href="#iOS和android平台上的差异" class="headerlink" title="iOS和android平台上的差异"></a>iOS和android平台上的差异</h3><p>（1）小心使用modal</p>
+<p>项目开发中，发现在iOS平台上，如果一个界面上同时显示两个及以上的modal组件，界面会卡死无法进行任何的交互操作。</p>
+<p>解决办法：页面开发中如果需要使用到浮层，尽量避免使用Modal组件避免同一界面会同时出现两个Modal浮层的情况，或者使用三方库图层组件来代替，例如teaset中的Overlay。</p>
+<p>（2）Text组件文字居中</p>
+<p>Text组件中的textAlignVertical只在Android上有效，iOS上无效，设置该属性文字内容无法在Text组件中垂直居中，文字居中可使用View包裹Text来实现，封装后屏蔽双端上的差异。</p>
+<p>（3）视频播放ios不暂停循环播放</p>
+<p>备注：this.setState({…},()=&gt;{})，设置状态函数中有一个回调函数，会在页面刷新渲染完成后回调。<br>进度初始化需要放在pause状态后设置。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">onEnd=&#123;() =&gt; &#123;</span><br><span class="line">          this.setState(</span><br><span class="line">            &#123;paused: true&#125;,</span><br><span class="line">            () =&gt; &#123;</span><br><span class="line">              this.player.seek(0);</span><br><span class="line">            &#125;,</span><br><span class="line">          );</span><br><span class="line">        &#125;&#125;</span><br></pre></td></tr></table></figure>
+
+
+<p>（4）输入法问题 </p>
+<p>点击输入框，键盘弹起在android和ios的效果不一样</p>
+<h3 id="使用Webview的闪退问题"><a href="#使用Webview的闪退问题" class="headerlink" title="使用Webview的闪退问题"></a>使用Webview的闪退问题</h3><p>Android上react-native-webview组件对返回键事件的处理和本身物理按键返回退出页面冲突，库内部闪退，造成程序闪退，重写安卓物理返回按键，并拦截事件屏蔽webview的返回。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">onBackAndroid() &#123;</span><br><span class="line">    this.setState(&#123;showWebview: false&#125;, () =&gt; &#123;</span><br><span class="line">      this.props.navigation.goBack();</span><br><span class="line">    &#125;);</span><br><span class="line">    return true;//拦截</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  componentWillUnmount() &#123;</span><br><span class="line">    BackHandler.removeEventListener(&#x27;hardwareBackPress&#x27;, this.onBackAndroid);</span><br><span class="line">  &#125;</span><br><span class="line">  componentDidMount() &#123;</span><br><span class="line">    BackHandler.addEventListener(&#x27;hardwareBackPress&#x27;, this.onBackAndroid);</span><br><span class="line">      </span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="日期时间格式化的问题"><a href="#日期时间格式化的问题" class="headerlink" title="日期时间格式化的问题"></a>日期时间格式化的问题</h3><p>node.js转化异常，js端可用的new Date（time）.getTime()无法正确格式化时间戳，引入moment库解决</p>
+<h3 id="其他问题"><a href="#其他问题" class="headerlink" title="其他问题"></a>其他问题</h3><p>（1） 视频播放、图片url不能包含中文；</p>
+<p>（2） 本地视频后缀大写.MP4不能播放；</p>
+<p>（3）react-natve-element库中的Button组件会出现偶现丢失背景色的情况；</p>
+<p>（4）Debug调试模式下定时器不正常，时间跑的很快；</p>
+
         
     </section>
 </article>
