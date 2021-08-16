@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+
+    
+
+    
+
+    <title>部署BCenter子应用 | 汽车云技术博客</title>
+    <meta name="author" content="qiov" />
+    <meta name="keywords" content="" />
+    <meta name="description" content="背景在项目迭代开发过程中，需要将BCenter子应用部署到线上，梳理出部署流程。部署大致流程可参考下图：1 准备工作 1.1 找运维同学提供OpenVPN和跳板机（用户访问jenkins），申请腾讯云协作者账号(用于创建pod，configMap等)2 jenkins2.1 新建Item 2.2 此处有个技巧，直接复制以前项目的配置进行调整 2.3 调整分支，镜像服务名（镜像一般运维提供，也可以参考已部署的项目，service自行调整） 2.4 调整git仓库地址 2.5 选项参数根据项目配置 " />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no" />
+
+    
+    
+    <link rel="icon" href="/images/favicon.ico">
+    
+
+    <style type="text/css">
+    @font-face {
+        font-family: 'icomoon';
+        src: url("/fonts/icomoon.eot?q628ml");
+        src: url("/fonts/icomoon.eot?q628ml#iefix") format('embedded-opentype'),
+             url("/fonts/icomoon.ttf?q628ml") format('truetype'),
+             url("/fonts/icomoon.woff?q628ml") format('woff'),
+             url("/fonts/icomoon.svg?q628ml#icomoon") format('svg');
+        font-weight: normal;
+        font-style: normal;
+    }
+    </style>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    <!--[if lt IE 9]><style type="text/css">.nav-inner {top:0;}.author-meta {position:static;top:0;}.search-form {height:36px;}</style><script type="text/javascript" src="https://unpkg.com/html5shiv@3.7.3/dist/html5shiv.min.js"></script><![endif]-->
+<meta name="generator" content="Hexo 5.4.0"></head>
+<body>
+
+    <main class="app">
+        <header id="header" class="header clearfix">
+  <div id="nav" class="nav">
+    <div class="nav-mobile">
+        <button id="open-panel" class="open-panel nav-mobile-item"><i class="icon-documents"></i></button>
+        <h1 class="nav-mobile-title nav-mobile-item">汽车云技术博客</h1>
+        <button id="open-menus" class="open-panel nav-mobile-item"><i class="icon-library"></i></button>
+    </div>
+
+    <nav id="nav-inner" class="nav-inner">
+        
+            <a class="nav-item" href="/">
+                <span class="nav-text">首页</span>
+            </a>
+        
+            <a class="nav-item" href="/tags">
+                <span class="nav-text">标签</span>
+            </a>
+        
+            <a class="nav-item" href="/archives">
+                <span class="nav-text">归档</span>
+            </a>
+        
+            <a class="nav-item" href="/about">
+                <span class="nav-text">关于</span>
+            </a>
+        
+    </nav>
+</div>
+
+  <aside id="aside" class="aside">
+    <div id="aside-mask" class="aside-mask"></div>
+    <div id="aside-inner" class="aside-inner">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit"><i class="icon-search-stroke"></i></button><input type="hidden" name="sitesearch" value="https://qiov.github.io"></form>
+
+        
+        
+        
+        
+
+        
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%83%8C%E6%99%AF"><span class="toc-number">1.</span> <span class="toc-text">背景</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C"><span class="toc-number">1.1.</span> <span class="toc-text">1 准备工作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-jenkins"><span class="toc-number">1.2.</span> <span class="toc-text">2 jenkins</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E8%85%BE%E8%AE%AF%E4%BA%91%E9%95%9C%E5%83%8F"><span class="toc-number">1.3.</span> <span class="toc-text">3 腾讯云镜像</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B"><span class="toc-number">1.4.</span> <span class="toc-text">示例</span></a></li></ol></li></ol>
+        
+    </div>
+</aside>
+
+  
+<link rel="stylesheet" href="/css/jquery.fancybox.min.css">
+
+</header>
+
+        <div id="content" class="content">
+            <div id="wrapper" class="wrapper" style="max-width: 800px">
+                <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            部署BCenter子应用
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://qiov.github.io/2021/08/16/deploy-center-child-app/index.html">
+    
+    <i class="icon-calendar vm"></i>
+    
+    <time class="vm" datetime="2021-08-16T11:27:21.133Z" itemprop="datePublished">2021-08-16</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag vm"></i>
+    <a class="article-tag-link" href="/tags/%E9%83%A8%E7%BD%B2/" rel="tag">部署</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>在项目迭代开发过程中，需要将BCenter子应用部署到线上，梳理出部署流程。</p>
+<ul>
+<li>部署大致流程可参考下图：<br><img src="https://blog-1255598736.cos.ap-nanjing.myqcloud.com/deployChildApp/1.png"></li>
+</ul>
+<span id="more"></span>
+<h3 id="1-准备工作"><a href="#1-准备工作" class="headerlink" title="1 准备工作"></a>1 准备工作</h3><p> 1.1 找运维同学提供OpenVPN和跳板机（用户访问jenkins），申请腾讯云协作者账号(用于创建pod，configMap等)</p>
+<h3 id="2-jenkins"><a href="#2-jenkins" class="headerlink" title="2 jenkins"></a>2 jenkins</h3><ul>
+<li>2.1 新建Item<br> <img src="https://blog-1255598736.cos.ap-nanjing.myqcloud.com/deployChildApp/2.png"></li>
+<li>2.2 此处有个技巧，直接复制以前项目的配置进行调整<br> <img src="https://blog-1255598736.cos.ap-nanjing.myqcloud.com/deployChildApp/3.png"></li>
+<li>2.3 调整分支，镜像服务名（镜像一般运维提供，也可以参考已部署的项目，service自行调整）<br> <img src="https://blog-1255598736.cos.ap-nanjing.myqcloud.com/deployChildApp/4.png"></li>
+<li>2.4 调整git仓库地址<br> <img src="https://blog-1255598736.cos.ap-nanjing.myqcloud.com/deployChildApp/5.png"></li>
+<li>2.5 选项参数根据项目配置<br> <img src="https://blog-1255598736.cos.ap-nanjing.myqcloud.com/deployChildApp/6.png"></li>
+<li>2.6 开始构建 构建完成镜像会推送到腾讯云<br> <img src="https://blog-1255598736.cos.ap-nanjing.myqcloud.com/deployChildApp/7.png"></li>
+</ul>
+<h3 id="3-腾讯云镜像"><a href="#3-腾讯云镜像" class="headerlink" title="3 腾讯云镜像"></a>3 腾讯云镜像</h3><p>3.1 选择配置管理 选择对应命名空间新建ConfigMap 此操作可放后面，可后续再配置工作负载的ConfigMap<br>   <img src="https://blog-1255598736.cos.ap-nanjing.myqcloud.com/deployChildApp/13.png"><br>3.2  配置 ConfigMap 变量名 APP_CONFIG（子应用统一用此命名）值参考下面JSON<br>   <img src="https://blog-1255598736.cos.ap-nanjing.myqcloud.com/deployChildApp/14.png"></p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line"><span class="attr">&quot;redis&quot;</span>: &#123;</span><br><span class="line"><span class="attr">&quot;host&quot;</span>: <span class="string">&quot;10.30.0.13&quot;</span>,</span><br><span class="line"><span class="attr">&quot;port&quot;</span>: <span class="string">&quot;6379&quot;</span>,</span><br><span class="line"><span class="attr">&quot;db&quot;</span>: <span class="string">&quot;6&quot;</span>,</span><br><span class="line"><span class="attr">&quot;pass&quot;</span>: <span class="string">&quot;J8oS1dRjMGUn1F9Z&quot;</span></span><br><span class="line">&#125;,</span><br><span class="line"><span class="attr">&quot;inc&quot;</span>: &#123;</span><br><span class="line"><span class="attr">&quot;appId&quot;</span>: <span class="string">&quot;92582975&quot;</span>,</span><br><span class="line"><span class="attr">&quot;appSecret&quot;</span>: <span class="string">&quot;b0581d2f-0d32-425e-810c-a71050be79b7&quot;</span>,</span><br><span class="line"><span class="attr">&quot;incServer&quot;</span>: <span class="string">&quot;https://center.travel.qq.com&quot;</span></span><br><span class="line">&#125;,</span><br><span class="line"><span class="attr">&quot;api&quot;</span>: &#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>3.3 选择对应命名空间 新建工作负载<br>   <img src="https://blog-1255598736.cos.ap-nanjing.myqcloud.com/deployChildApp/8.jpeg"><br>3.4 填写工作负载名称，命名空间等信息<br>   <img src="https://blog-1255598736.cos.ap-nanjing.myqcloud.com/deployChildApp/9.png"><br>3.5 点击选择镜像和版本 (此处是jenkins推上的镜像)<br>  <img src="https://blog-1255598736.cos.ap-nanjing.myqcloud.com/deployChildApp/10.png"><br>3.6 选择镜像<br>  <img src="https://blog-1255598736.cos.ap-nanjing.myqcloud.com/deployChildApp/11.png"><br>3.7 填写环境变量参数 环境变量参数(参考上图)</p>
+<table>
+<thead>
+<tr>
+<th><strong>参数类型</strong></th>
+<th><strong>参数名</strong></th>
+<th><strong>参数值</strong></th>
+<th><strong>说明</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>自定义</td>
+<td>PATH</td>
+<td>/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin</td>
+<td></td>
+</tr>
+<tr>
+<td>自定义</td>
+<td>NODE_VERSION</td>
+<td>10.20.1</td>
+<td></td>
+</tr>
+<tr>
+<td>自定义</td>
+<td>YARN_VERSION</td>
+<td>1.22.4</td>
+<td></td>
+</tr>
+<tr>
+<td>自定义</td>
+<td>NODE_ENV</td>
+<td>test</td>
+<td>根据环境以此类推(pre,prd)</td>
+</tr>
+<tr>
+<td>自定义</td>
+<td>INC_PLATFORM</td>
+<td>inc-cms</td>
+<td>和创建的ConfigMap保持一致</td>
+</tr>
+<tr>
+<td>ConfigMap</td>
+<td>APP_CONFIG</td>
+<td>inc-cms/APP_CONFIG</td>
+<td>选择创建的configMap</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>3.8 创建工作负载，点击创建WorkLoad</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<p>3.9 至此创建工作完成，工作负载列表能看到对应pod<br>  <img src="https://blog-1255598736.cos.ap-nanjing.myqcloud.com/deployChildApp/16.png"></p>
+<p>3.9.1 最后进行server配置（正常前面操作没有问题无误，对应命名空间下的server会存在）</p>
+<blockquote>
+<p>Ingress 一般用于配置域名转发，一般运维配置，此处不展开讲<br>  <img src="https://blog-1255598736.cos.ap-nanjing.myqcloud.com/deployChildApp/17.png"><br>  <img src="https://blog-1255598736.cos.ap-nanjing.myqcloud.com/deployChildApp/18.png"></p>
+</blockquote>
+<p>3.9.1 使用外网IP和对应端口访问服务，整个部署流程完成<br><img src="https://blog-1255598736.cos.ap-nanjing.myqcloud.com/deployChildApp/19.jpeg"></p>
+<h3 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h3><ul>
+<li><p>jenkins脚本 <a target="_blank" rel="noopener" href="http://192.168.253.5:8080/job/INC-Project/job/iov-cms-portal/configure">http://192.168.253.5:8080/job/INC-Project/job/iov-cms-portal/configure</a></p>
+</li>
+<li><p>ConfigMap对应配置 <a target="_blank" rel="noopener" href="https://console.cloud.tencent.com/tke2/cluster/sub/update/config/configmap/modifyConfigData?rid=1&clusterId=cls-in48ci4a&np=inc-dev&resourceIns=inc-cms">https://console.cloud.tencent.com/tke2/cluster/sub/update/config/configmap/modifyConfigData?rid=1&amp;clusterId=cls-in48ci4a&amp;np=inc-dev&amp;resourceIns=inc-cms</a></p>
+</li>
+<li><p>Service <a target="_blank" rel="noopener" href="https://console.cloud.tencent.com/tke2/cluster/sub/list/service/svc?rid=1&clusterId=cls-in48ci4a&np=inc-dev">https://console.cloud.tencent.com/tke2/cluster/sub/list/service/svc?rid=1&amp;clusterId=cls-in48ci4a&amp;np=inc-dev</a> </p>
+</li>
+<li><p>Pod配置 <a target="_blank" rel="noopener" href="https://console.cloud.tencent.com/tke2/cluster/sub/update/resource/deployment/modifyPodTpl?rid=1&clusterId=cls-in48ci4a&np=inc-dev&resourceIns=inc-cms">https://console.cloud.tencent.com/tke2/cluster/sub/update/resource/deployment/modifyPodTpl?rid=1&amp;clusterId=cls-in48ci4a&amp;np=inc-dev&amp;resourceIns=inc-cms</a> </p>
+</li>
+</ul>
+
+        
+    </section>
+</article>
+
+
+
+<a id="pagenext" href="/2021/08/16/git-commit-with-tapd-keywords/" class="article-next" title="TAPD+工蜂，让代码和需求缺陷单关联起来"><i class="icon-arrow-right"></i></a>
+
+
+<a id="pageprev" href="/2021/08/16/android_gradle_illustration/" class="article-prev" title="Android Gradle远程仓库、依赖库使用注意"><i class="icon-arrow-left"></i></a>
+
+
+
+<div class="comments">
+    <div id="comments"></div>
+    <script src="/js/gitalk.min.js"></script>
+    <script>
+    new Gitalk({
+        clientID: "814115adcfdf958f7124",
+        clientSecret: "e0e03b20fe5801d1e91a7b4f02024e0c7e548a47",
+        repo: "blog-comment",
+        owner: "aslinwang",
+        admin: ["aslinwang"],
+        id: "a86696fe44485942b70fd53c39ad40b3",
+        distractionFreeMode: true,
+        title: "部署BCenter子应用",
+        body: "https://qiov.github.io/2021/08/16/deploy-center-child-app/",
+        labels: ["部署"]
+    }).render('comments');
+    </script>
+</div>
+
+
+
+            </div>
+        </div>
+        <footer class="footer">
+    Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>, Theme by <a href="https://github.com/sanonz/hexo-theme-concise" target="_blank">Concise</a>
+
+    
+</footer>
+
+    </main>
+
+    <script type="text/javascript" src="/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/js/jquery.fancybox.min.js"></script>
+    <script type="text/javascript" src="/js/wrapImg.js"></script>
+    <script type="text/javascript">
+    $(function() {
+        var nodes = {
+            nav: $('#nav'),
+            aside: $('#aside'),
+            asideInner: $('#aside-inner'),
+            navInner: $('#nav-inner')
+        };
+
+        var doing = false;
+        nodes.asideInner.on('webkitAnimationEnd mozAnimationEnd oAnimationEnd oanimationend animationend', function() {
+            if (nodes.aside.hasClass('mobile-open')) {
+                nodes.aside.removeClass('mobile-open');
+            } else {
+                nodes.aside.removeClass('mobile-close panel-show');
+            }
+            doing = false;
+        });
+        $('#open-panel, #aside-mask').on('click', function() {
+            if (doing) {
+                return;
+            }
+
+            if (nodes.aside.hasClass('panel-show')) {
+                nodes.aside.addClass('mobile-close');
+            } else {
+                nodes.aside.addClass('mobile-open panel-show');
+            }
+        });
+        $('#open-menus').on('click', function() {
+            nodes.navInner.slideToggle('normal', slideDone);
+        });
+
+        if (window.innerWidth <= 960) {
+            setTimeout(function() {
+                nodes.navInner.slideUp('normal', slideDone);
+            }, 3000);
+        }
+
+        function slideDone() {
+            if (nodes.navInner.css('display') !== 'none') {
+                nodes.navInner.css('display', '');
+            }
+        }
+
+        $(window).on('resize', function() {
+            if ($(this).width() > 960) {
+                nodes.navInner.css('display', '');
+            }
+        });
+    });
+    </script>
+    
+        
+<script src="/js/scrollspy.min.js"></script>
+
+        <script type="text/javascript">
+        $(document.body).scrollspy({target: '#aside-inner'});
+
+        $(window).on('resize', function() {
+            var hw = $('#header').width();
+            var ww = $('#wrapper').width();
+            var space = ($(this).width() - hw - ww) / 2 / 2;
+
+            var pageprev = $('#pageprev');
+            var pagenext = $('#pagenext');
+            var avg = (pageprev.width() + pagenext.width()) / 2
+
+            if(space > avg) {
+                var len = space - avg / 2;
+                var styles = {position: 'fixed', top: '50%', marginTop: - (pageprev.width() + pagenext.width()) / 4}
+                pageprev.css($.extend({left: hw + len}, styles));
+                pagenext.css($.extend({right: len}, styles));
+            } else {
+                pageprev.removeAttr('style');
+                pagenext.removeAttr('style');
+            }
+        }).trigger('resize');
+        </script>
+    
+
+</body>
+</html>
