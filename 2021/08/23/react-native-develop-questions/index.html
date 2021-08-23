@@ -80,7 +80,7 @@
         
 
         
-        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#iOS%E5%92%8Candroid%E5%B9%B3%E5%8F%B0%E4%B8%8A%E7%9A%84%E5%B7%AE%E5%BC%82"><span class="toc-number">1.</span> <span class="toc-text">iOS和android平台上的差异</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8Webview%E7%9A%84%E9%97%AA%E9%80%80%E9%97%AE%E9%A2%98"><span class="toc-number">2.</span> <span class="toc-text">使用Webview的闪退问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%97%A5%E6%9C%9F%E6%97%B6%E9%97%B4%E6%A0%BC%E5%BC%8F%E5%8C%96%E7%9A%84%E9%97%AE%E9%A2%98"><span class="toc-number">3.</span> <span class="toc-text">日期时间格式化的问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B6%E4%BB%96%E9%97%AE%E9%A2%98"><span class="toc-number">4.</span> <span class="toc-text">其他问题</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#iOS%E5%92%8Candroid%E5%B9%B3%E5%8F%B0%E4%B8%8A%E7%9A%84%E5%B7%AE%E5%BC%82"><span class="toc-number">1.</span> <span class="toc-text">iOS和android平台上的差异</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8Webview%E7%9A%84%E9%97%AA%E9%80%80%E9%97%AE%E9%A2%98"><span class="toc-number">2.</span> <span class="toc-text">使用Webview的闪退问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%97%A5%E6%9C%9F%E6%97%B6%E9%97%B4%E6%A0%BC%E5%BC%8F%E5%8C%96%E7%9A%84%E9%97%AE%E9%A2%98"><span class="toc-number">3.</span> <span class="toc-text">日期时间格式化的问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93"><span class="toc-number">4.</span> <span class="toc-text">使用第三方库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B6%E4%BB%96%E9%97%AE%E9%A2%98"><span class="toc-number">5.</span> <span class="toc-text">其他问题</span></a></li></ol>
         
     </div>
 </aside>
@@ -101,11 +101,11 @@
         </h1>
         
         <div class="article-meta clearfix">
-            <a class="article-date" href="https://qiov.github.io/2021/08/19/react-native-develop-questions/index.html">
+            <a class="article-date" href="https://qiov.github.io/2021/08/23/react-native-develop-questions/index.html">
     
     <i class="icon-calendar vm"></i>
     
-    <time class="vm" datetime="2021-08-19T13:36:54.856Z" itemprop="datePublished">2021-08-19</time>
+    <time class="vm" datetime="2021-08-23T07:37:14.540Z" itemprop="datePublished">2021-08-23</time>
 </a>
 
             
@@ -137,6 +137,21 @@
 
 
 <h3 id="日期时间格式化的问题"><a href="#日期时间格式化的问题" class="headerlink" title="日期时间格式化的问题"></a>日期时间格式化的问题</h3><p>node.js转化异常，js端可用的new Date（time）.getTime()无法正确格式化时间戳，引入moment库解决</p>
+<h3 id="使用第三方库"><a href="#使用第三方库" class="headerlink" title="使用第三方库"></a>使用第三方库</h3><p>（1）react-native-camera 视频录制格式问题</p>
+<p>项目开发中，实名认证需要唇语视频认证，使用react-native-camera库。上传视频编码格式为h265,认证方在浏览器中播放不支持该格式，有声音没有视频造成认证失败。</p>
+<p>react-native-camera 使用中在options中如果不设置编码格式，采用设备默认的编码格式。在iOS11以上的版本中，系统默认使用h265格式的编码。</p>
+<p>解决方案：ios设备设置编码格式</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">let options = &#123;</span><br><span class="line">     quality: RNCamera.Constants.VideoQuality[&#x27;480p&#x27;], //4:3</span><br><span class="line">     maxFileSize: 4 * 1024 * 1024, //最大视频大小</span><br><span class="line">     maxDuration: 5, //最大持续时间s</span><br><span class="line">   &#125;;</span><br><span class="line">   if (Platform.OS === &#x27;ios&#x27;) &#123;</span><br><span class="line">     options.codec = RNCamera.Constants.VideoCodec.H264;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+<p>（2） react-native-syan-image-picker上传图片部分图片在安卓机型上倾斜有黑边<br>在项目开发中，端上社区发帖中碰到在安卓机型上，上传的图片显示出来后会出现小角度的旋转，边缘会有黑边的情况</p>
+<img src="/2021/08/23/react-native-develop-questions/1.jpg" class="">
+
+<p>上传图片库会在选择图片后进行压缩，该库不能禁止压缩，禁止压缩无法上传成功。</p>
+<p>经排查，在该开源库的Issues中有使用者也碰到同样的问题 <a target="_blank" rel="noopener" href="https://github.com/syanbo/react-native-syan-image-picker/issues/166">https://github.com/syanbo/react-native-syan-image-picker/issues/166</a> 这个里面给到了解决方案。</p>
+<p>修改方式：react-native-syan-image-picker的原生库安卓端依赖了PictureSelector，倾斜黑边问题在PictureSelector 2.5.8版本以上已经修复</p>
+<img src="/2021/08/23/react-native-develop-questions/2.jpg" class="">
+
+
 <h3 id="其他问题"><a href="#其他问题" class="headerlink" title="其他问题"></a>其他问题</h3><p>（1） 视频播放、图片url不能包含中文；</p>
 <p>（2） 本地视频后缀大写.MP4不能播放；</p>
 <p>（3）react-natve-element库中的Button组件会出现偶现丢失背景色的情况；</p>
@@ -148,10 +163,8 @@
 
 
 
-<a id="pagenext" href="/2021/08/19/rancher-cli-docker/" class="article-next" title="使用rancher cli操作docker pod"><i class="icon-arrow-right"></i></a>
+<a id="pagenext" href="/2021/08/23/android_gradle_illustration/" class="article-next" title="Android Gradle远程仓库、依赖库使用注意"><i class="icon-arrow-right"></i></a>
 
-
-<a id="pageprev" href="/2021/08/19/deploy-center-child-app/" class="article-prev" title="部署BCenter子应用"><i class="icon-arrow-left"></i></a>
 
 
 

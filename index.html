@@ -111,7 +111,7 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2021/08/19/android_gradle_illustration/">Android Gradle远程仓库、依赖库使用注意</a>
+            <a href="/2021/08/23/react-native-develop-questions/">使用react-native开发app踩坑记录</a>
         </h1>
         
         <div class="article-meta clearfix">
@@ -119,7 +119,77 @@
     
     <i class="icon-calendar vm"></i>
     
-    <time class="vm" datetime="2021-08-19T13:36:54.856Z" itemprop="datePublished">2021-08-19</time>
+    <time class="vm" datetime="2021-08-23T07:37:14.540Z" itemprop="datePublished">2021-08-23</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag vm"></i>
+    <a class="article-tag-link" href="/tags/react-native/" rel="tag">react-native</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h3 id="iOS和android平台上的差异"><a href="#iOS和android平台上的差异" class="headerlink" title="iOS和android平台上的差异"></a>iOS和android平台上的差异</h3><p>（1）小心使用modal</p>
+<p>项目开发中，发现在iOS平台上，如果一个界面上同时显示两个及以上的modal组件，界面会卡死无法进行任何的交互操作。</p>
+<p>解决办法：页面开发中如果需要使用到浮层，尽量避免使用Modal组件避免同一界面会同时出现两个Modal浮层的情况，或者使用三方库图层组件来代替，例如teaset中的Overlay。</p>
+<p>（2）Text组件文字居中</p>
+<p>Text组件中的textAlignVertical只在Android上有效，iOS上无效，设置该属性文字内容无法在Text组件中垂直居中，文字居中可使用View包裹Text来实现，封装后屏蔽双端上的差异。</p>
+<p>（3）视频播放ios不暂停循环播放</p>
+<p>备注：this.setState({…},()=&gt;{})，设置状态函数中有一个回调函数，会在页面刷新渲染完成后回调。<br>进度初始化需要放在pause状态后设置。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">onEnd=&#123;() =&gt; &#123;</span><br><span class="line">          this.setState(</span><br><span class="line">            &#123;paused: true&#125;,</span><br><span class="line">            () =&gt; &#123;</span><br><span class="line">              this.player.seek(0);</span><br><span class="line">            &#125;,</span><br><span class="line">          );</span><br><span class="line">        &#125;&#125;</span><br></pre></td></tr></table></figure>
+
+
+<p>（4）输入法问题 </p>
+<p>点击输入框，键盘弹起在android和ios的效果不一样</p>
+<h3 id="使用Webview的闪退问题"><a href="#使用Webview的闪退问题" class="headerlink" title="使用Webview的闪退问题"></a>使用Webview的闪退问题</h3><p>Android上react-native-webview组件对返回键事件的处理和本身物理按键返回退出页面冲突，库内部闪退，造成程序闪退，重写安卓物理返回按键，并拦截事件屏蔽webview的返回。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">onBackAndroid() &#123;</span><br><span class="line">    this.setState(&#123;showWebview: false&#125;, () =&gt; &#123;</span><br><span class="line">      this.props.navigation.goBack();</span><br><span class="line">    &#125;);</span><br><span class="line">    return true;//拦截</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  componentWillUnmount() &#123;</span><br><span class="line">    BackHandler.removeEventListener(&#x27;hardwareBackPress&#x27;, this.onBackAndroid);</span><br><span class="line">  &#125;</span><br><span class="line">  componentDidMount() &#123;</span><br><span class="line">    BackHandler.addEventListener(&#x27;hardwareBackPress&#x27;, this.onBackAndroid);</span><br><span class="line">      </span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="日期时间格式化的问题"><a href="#日期时间格式化的问题" class="headerlink" title="日期时间格式化的问题"></a>日期时间格式化的问题</h3><p>node.js转化异常，js端可用的new Date（time）.getTime()无法正确格式化时间戳，引入moment库解决</p>
+<h3 id="使用第三方库"><a href="#使用第三方库" class="headerlink" title="使用第三方库"></a>使用第三方库</h3><p>（1）react-native-camera 视频录制格式问题</p>
+<p>项目开发中，实名认证需要唇语视频认证，使用react-native-camera库。上传视频编码格式为h265,认证方在浏览器中播放不支持该格式，有声音没有视频造成认证失败。</p>
+<p>react-native-camera 使用中在options中如果不设置编码格式，采用设备默认的编码格式。在iOS11以上的版本中，系统默认使用h265格式的编码。</p>
+<p>解决方案：ios设备设置编码格式</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">let options = &#123;</span><br><span class="line">     quality: RNCamera.Constants.VideoQuality[&#x27;480p&#x27;], //4:3</span><br><span class="line">     maxFileSize: 4 * 1024 * 1024, //最大视频大小</span><br><span class="line">     maxDuration: 5, //最大持续时间s</span><br><span class="line">   &#125;;</span><br><span class="line">   if (Platform.OS === &#x27;ios&#x27;) &#123;</span><br><span class="line">     options.codec = RNCamera.Constants.VideoCodec.H264;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+<p>（2） react-native-syan-image-picker上传图片部分图片在安卓机型上倾斜有黑边<br>在项目开发中，端上社区发帖中碰到在安卓机型上，上传的图片显示出来后会出现小角度的旋转，边缘会有黑边的情况</p>
+<img src="/2021/08/23/react-native-develop-questions/1.jpg" class="">
+
+<p>上传图片库会在选择图片后进行压缩，该库不能禁止压缩，禁止压缩无法上传成功。</p>
+<p>经排查，在该开源库的Issues中有使用者也碰到同样的问题 <a target="_blank" rel="noopener" href="https://github.com/syanbo/react-native-syan-image-picker/issues/166">https://github.com/syanbo/react-native-syan-image-picker/issues/166</a> 这个里面给到了解决方案。</p>
+<p>修改方式：react-native-syan-image-picker的原生库安卓端依赖了PictureSelector，倾斜黑边问题在PictureSelector 2.5.8版本以上已经修复</p>
+<img src="/2021/08/23/react-native-develop-questions/2.jpg" class="">
+
+
+<h3 id="其他问题"><a href="#其他问题" class="headerlink" title="其他问题"></a>其他问题</h3><p>（1） 视频播放、图片url不能包含中文；</p>
+<p>（2） 本地视频后缀大写.MP4不能播放；</p>
+<p>（3）react-natve-element库中的Button组件会出现偶现丢失背景色的情况；</p>
+<p>（4）Debug调试模式下定时器不正常，时间跑的很快；</p>
+
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2021/08/23/android_gradle_illustration/">Android Gradle远程仓库、依赖库使用注意</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="https://qiov.github.io/index.html">
+    
+    <i class="icon-calendar vm"></i>
+    
+    <time class="vm" datetime="2021-08-23T07:37:14.536Z" itemprop="datePublished">2021-08-23</time>
 </a>
 
             
@@ -156,7 +226,7 @@
     <header class="article-header">
         
         <h1 itemprop="name">
-            <a href="/2021/08/19/deploy-center-child-app/">部署BCenter子应用</a>
+            <a href="/2021/08/23/deploy-center-child-app/">部署BCenter子应用</a>
         </h1>
         
         <div class="article-meta clearfix">
@@ -164,7 +234,7 @@
     
     <i class="icon-calendar vm"></i>
     
-    <time class="vm" datetime="2021-08-19T13:36:54.856Z" itemprop="datePublished">2021-08-19</time>
+    <time class="vm" datetime="2021-08-23T07:37:14.536Z" itemprop="datePublished">2021-08-23</time>
 </a>
 
             
@@ -185,67 +255,12 @@
 </ul>
         
         <p class="article-more-link">
-            <a href="/2021/08/19/deploy-center-child-app/#more">
+            <a href="/2021/08/23/deploy-center-child-app/#more">
                 <span class="vm">阅读更多</span>
                 <i class="icon-arrow-double-right vm"></i>    
             </a>
         </p>
         
-        
-    </section>
-</article>
-
-
-    <article class="article" itemscope itemprop="blogPost">
-    
-    <header class="article-header">
-        
-        <h1 itemprop="name">
-            <a href="/2021/08/19/react-native-develop-questions/">使用react-native开发app踩坑记录</a>
-        </h1>
-        
-        <div class="article-meta clearfix">
-            <a class="article-date" href="https://qiov.github.io/index.html">
-    
-    <i class="icon-calendar vm"></i>
-    
-    <time class="vm" datetime="2021-08-19T13:36:54.856Z" itemprop="datePublished">2021-08-19</time>
-</a>
-
-            
-<div class="article-tag-list">
-    <i class="icon-tag vm"></i>
-    <a class="article-tag-link" href="/tags/react-native/" rel="tag">react-native</a>
-</div>
-
-
-        </div>
-    </header>
-    
-    <section class="article-body markdown-body">
-        
-        <h3 id="iOS和android平台上的差异"><a href="#iOS和android平台上的差异" class="headerlink" title="iOS和android平台上的差异"></a>iOS和android平台上的差异</h3><p>（1）小心使用modal</p>
-<p>项目开发中，发现在iOS平台上，如果一个界面上同时显示两个及以上的modal组件，界面会卡死无法进行任何的交互操作。</p>
-<p>解决办法：页面开发中如果需要使用到浮层，尽量避免使用Modal组件避免同一界面会同时出现两个Modal浮层的情况，或者使用三方库图层组件来代替，例如teaset中的Overlay。</p>
-<p>（2）Text组件文字居中</p>
-<p>Text组件中的textAlignVertical只在Android上有效，iOS上无效，设置该属性文字内容无法在Text组件中垂直居中，文字居中可使用View包裹Text来实现，封装后屏蔽双端上的差异。</p>
-<p>（3）视频播放ios不暂停循环播放</p>
-<p>备注：this.setState({…},()=&gt;{})，设置状态函数中有一个回调函数，会在页面刷新渲染完成后回调。<br>进度初始化需要放在pause状态后设置。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">onEnd=&#123;() =&gt; &#123;</span><br><span class="line">          this.setState(</span><br><span class="line">            &#123;paused: true&#125;,</span><br><span class="line">            () =&gt; &#123;</span><br><span class="line">              this.player.seek(0);</span><br><span class="line">            &#125;,</span><br><span class="line">          );</span><br><span class="line">        &#125;&#125;</span><br></pre></td></tr></table></figure>
-
-
-<p>（4）输入法问题 </p>
-<p>点击输入框，键盘弹起在android和ios的效果不一样</p>
-<h3 id="使用Webview的闪退问题"><a href="#使用Webview的闪退问题" class="headerlink" title="使用Webview的闪退问题"></a>使用Webview的闪退问题</h3><p>Android上react-native-webview组件对返回键事件的处理和本身物理按键返回退出页面冲突，库内部闪退，造成程序闪退，重写安卓物理返回按键，并拦截事件屏蔽webview的返回。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">onBackAndroid() &#123;</span><br><span class="line">    this.setState(&#123;showWebview: false&#125;, () =&gt; &#123;</span><br><span class="line">      this.props.navigation.goBack();</span><br><span class="line">    &#125;);</span><br><span class="line">    return true;//拦截</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  componentWillUnmount() &#123;</span><br><span class="line">    BackHandler.removeEventListener(&#x27;hardwareBackPress&#x27;, this.onBackAndroid);</span><br><span class="line">  &#125;</span><br><span class="line">  componentDidMount() &#123;</span><br><span class="line">    BackHandler.addEventListener(&#x27;hardwareBackPress&#x27;, this.onBackAndroid);</span><br><span class="line">      </span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
-
-
-<h3 id="日期时间格式化的问题"><a href="#日期时间格式化的问题" class="headerlink" title="日期时间格式化的问题"></a>日期时间格式化的问题</h3><p>node.js转化异常，js端可用的new Date（time）.getTime()无法正确格式化时间戳，引入moment库解决</p>
-<h3 id="其他问题"><a href="#其他问题" class="headerlink" title="其他问题"></a>其他问题</h3><p>（1） 视频播放、图片url不能包含中文；</p>
-<p>（2） 本地视频后缀大写.MP4不能播放；</p>
-<p>（3）react-natve-element库中的Button组件会出现偶现丢失背景色的情况；</p>
-<p>（4）Debug调试模式下定时器不正常，时间跑的很快；</p>
-
         
     </section>
 </article>
